@@ -2474,12 +2474,14 @@ bool idAI::Attack ( const char* attackName, jointHandle_t joint, idEntity* targe
 	}
 
 	// Melee Attack?
+	// TODO: turn melee attack into them talking to you if you come near enough to "melee"
 	if ( spawnArgs.GetBool ( va("attack_%s_melee", attackName ), "0" ) ) {
 		return AttackMelee ( attackName, attackDict );
 	}
 
 	// Ranged attack (hitscan or projectile)?
-	return ( AttackRanged ( attackName, attackDict, joint, target, pushVelocity ) != NULL );
+	// TODO: figure out how to properly diable this
+	return ( false );
 }
 
 /*
