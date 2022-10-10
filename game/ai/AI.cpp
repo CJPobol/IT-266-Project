@@ -2480,7 +2480,7 @@ bool idAI::Attack ( const char* attackName, jointHandle_t joint, idEntity* targe
 	}
 
 	// Ranged attack (hitscan or projectile)?
-	// TODO: figure out how to properly diable this
+	// This now makes ranged attacks do no damage
 	return ( false );
 }
 
@@ -2776,6 +2776,8 @@ the facing direction + combat.meleeRange.
 
 kickDir is specified in the monster's coordinate system, and gives the direction
 that the view kick and knockback should go
+
+IS BEING TRANSFORMED INTO AN "INTERACT" SORT OF FUNCTION
 =====================
 */
 bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
@@ -2838,6 +2840,7 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 	idVec3	globalKickDir;
 	globalKickDir = ( viewAxis * physicsObj.GetGravityAxis() ) * kickDir;
 
+	/*
 	// This allows some AI to be soft against melee-- most marines are selfMeleeDamageScale of 3, which means they take 3X from melee attacks!
 	float damageScale = spawnArgs.GetFloat( "damageScale", "1" ) * enemyEnt->spawnArgs.GetFloat ( "selfMeleeDamageScale", "1" );
 
@@ -2855,12 +2858,12 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 	if( enemyAI->aifl.meleeSuperhero)	{
 		damageScale = 0.5f;
 	}
-
+	*/
 	int   location    = INVALID_JOINT;
 	if ( enemyEnt->IsType ( idAI::Type ) ) {
 		location = static_cast<idAI*>(enemyEnt)->chestOffsetJoint;
 	}
-	enemyEnt->Damage( this, this, globalKickDir, meleeDict->GetString ( "classname" ), damageScale, location );
+	//enemyEnt->Damage( this, this, globalKickDir, meleeDict->GetString ( "classname" ), damageScale, location );
 
 	if ( meleeDict->GetString( "fx_impact", NULL ) ) {
 		if ( enemyEnt == gameLocal.GetLocalPlayer() ) {
