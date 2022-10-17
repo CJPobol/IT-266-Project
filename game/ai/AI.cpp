@@ -2796,6 +2796,7 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 
 	// check for the "saving throw" automatic melee miss on lethal blow
 	// stupid place for this.
+	// TODO: dont have enemies interact with you via melee if you're already interacting with them.
 	bool forceMiss = false;
 	if ( enemyEnt->IsType( idPlayer::GetClassType() ) && g_skill.GetInteger() < 2 ) {
 		int	damage, armor;
@@ -2864,6 +2865,7 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 		location = static_cast<idAI*>(enemyEnt)->chestOffsetJoint;
 	}
 	//enemyEnt->Damage( this, this, globalKickDir, meleeDict->GetString ( "classname" ), damageScale, location );
+
 
 	if ( meleeDict->GetString( "fx_impact", NULL ) ) {
 		if ( enemyEnt == gameLocal.GetLocalPlayer() ) {
