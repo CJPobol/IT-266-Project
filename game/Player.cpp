@@ -3951,6 +3951,7 @@ void idPlayer::StopFiring( void ) {
 	pfl.attackHeld	= false;
 	pfl.weaponFired = false;
 	pfl.reload		= false;
+
 	if ( weapon ) {
 		weapon->EndAttack();
 	}
@@ -9964,7 +9965,7 @@ void idPlayer::CalcDamagePoints( idEntity *inflictor, idEntity *attacker, const 
 	int		armorSave;
 	float	pDmgScale;
 
-	damageDef->GetInt( "damage", "20", damage );
+	damageDef->GetInt( "damage", "0", damage );
 	damage = GetDamageForLocation( damage, location );
 
 	// optional different damage in team games
