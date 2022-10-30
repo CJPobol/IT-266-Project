@@ -3991,6 +3991,7 @@ void idPlayer::FireWeapon( void ) {
 			if ( weapon->AmmoInClip() || weapon->AmmoAvailable() ) {
 				pfl.attackHeld = true;
 				weapon->BeginAttack();
+				friends++;
 			} else {
 				pfl.attackHeld = false;
 				pfl.weaponFired = false;
@@ -10073,7 +10074,6 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	// RAVEN BEGIN
 	// twhitaker: difficulty levels
 	float modifiedDamageScale = damageScale;
-	friends++;
 
 	if ( !gameLocal.isMultiplayer ) {
 		if ( inflictor != gameLocal.world ) {
