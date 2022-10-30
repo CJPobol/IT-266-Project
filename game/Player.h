@@ -337,6 +337,7 @@ public:
 	idEntityPtr<idAnimatedEntity>	weaponWorldModel;
 	const idDeclEntityDef*			weaponDef;
 
+	int friends = 0;
 
  	idUserInterface *		hud;				// Common hud
 	idUserInterface *		mphud;				// hud overlay containing MP elements
