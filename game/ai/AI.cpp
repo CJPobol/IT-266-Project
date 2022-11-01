@@ -2815,9 +2815,9 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 		}
 
 		if (player->friends > 0)
-			gameLocal.Printf("Hello good friend!");
+			gameLocal.Printf("Hello good friend!\n");
 		else
-			gameLocal.Printf("Do we know you?");
+			gameLocal.Printf("Do we know you?\n");
 	}
 
 	// make sure the trace can actually hit the enemy

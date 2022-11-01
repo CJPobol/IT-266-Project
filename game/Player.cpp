@@ -3952,6 +3952,8 @@ void idPlayer::StopFiring( void ) {
 	pfl.weaponFired = false;
 	pfl.reload		= false;
 
+	
+
 	if ( weapon ) {
 		weapon->EndAttack();
 	}
@@ -3991,7 +3993,6 @@ void idPlayer::FireWeapon( void ) {
 			if ( weapon->AmmoInClip() || weapon->AmmoAvailable() ) {
 				pfl.attackHeld = true;
 				weapon->BeginAttack();
-				friends++;
 			} else {
 				pfl.attackHeld = false;
 				pfl.weaponFired = false;
@@ -9182,7 +9183,7 @@ void idPlayer::UpdateHud( void ) {
  	} else {
  		hud->SetStateString( "hudLag", "0" );
  	}
-
+	
 	hud->SetStateInt("friends_val", friends);
 }
 
@@ -11283,6 +11284,8 @@ void idPlayer::SetLastHitTime( int time, bool armorHit ) {
 		lastHitTime = time;
 		lastArmorHit = armorHit;
 		lastHitToggle ^= 1;
+		friends++;
+		gameLocal.Printf("Thank you!\n");
 	}
 }
 
