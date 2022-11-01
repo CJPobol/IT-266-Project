@@ -1,4 +1,3 @@
-
 #ifndef __GAME_ENTITY_H__
 #define __GAME_ENTITY_H__
 
@@ -9,6 +8,8 @@
 
 ===============================================================================
 */
+
+
 
 static const int DELAY_DORMANT_TIME = 3000;
 

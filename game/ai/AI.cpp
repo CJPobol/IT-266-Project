@@ -2474,12 +2474,14 @@ bool idAI::Attack ( const char* attackName, jointHandle_t joint, idEntity* targe
 	}
 
 	// Melee Attack?
+	// TODO: turn melee attack into them talking to you if you come near enough to "melee"
 	if ( spawnArgs.GetBool ( va("attack_%s_melee", attackName ), "0" ) ) {
 		return AttackMelee ( attackName, attackDict );
 	}
 
 	// Ranged attack (hitscan or projectile)?
-	return ( AttackRanged ( attackName, attackDict, joint, target, pushVelocity ) != NULL );
+	// This now makes ranged attacks do no damage
+	return ( false );
 }
 
 /*
@@ -2774,6 +2776,8 @@ the facing direction + combat.meleeRange.
 
 kickDir is specified in the monster's coordinate system, and gives the direction
 that the view kick and knockback should go
+
+IS BEING TRANSFORMED INTO AN "INTERACT" SORT OF FUNCTION
 =====================
 */
 bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
@@ -2792,6 +2796,7 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 
 	// check for the "saving throw" automatic melee miss on lethal blow
 	// stupid place for this.
+	// TODO: dont have enemies interact with you via melee if you're already interacting with them.
 	bool forceMiss = false;
 	if ( enemyEnt->IsType( idPlayer::GetClassType() ) && g_skill.GetInteger() < 2 ) {
 		int	damage, armor;
@@ -2808,6 +2813,11 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 				forceMiss = true;
 			}
 		}
+
+		if (player->friends > 0)
+			gameLocal.Printf("Hello good friend!\n");
+		else
+			gameLocal.Printf("Do we know you?\n");
 	}
 
 	// make sure the trace can actually hit the enemy
@@ -2836,6 +2846,7 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 	idVec3	globalKickDir;
 	globalKickDir = ( viewAxis * physicsObj.GetGravityAxis() ) * kickDir;
 
+	/*
 	// This allows some AI to be soft against melee-- most marines are selfMeleeDamageScale of 3, which means they take 3X from melee attacks!
 	float damageScale = spawnArgs.GetFloat( "damageScale", "1" ) * enemyEnt->spawnArgs.GetFloat ( "selfMeleeDamageScale", "1" );
 
@@ -2853,12 +2864,13 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 	if( enemyAI->aifl.meleeSuperhero)	{
 		damageScale = 0.5f;
 	}
-
+	*/
 	int   location    = INVALID_JOINT;
 	if ( enemyEnt->IsType ( idAI::Type ) ) {
 		location = static_cast<idAI*>(enemyEnt)->chestOffsetJoint;
 	}
-	enemyEnt->Damage( this, this, globalKickDir, meleeDict->GetString ( "classname" ), damageScale, location );
+	//enemyEnt->Damage( this, this, globalKickDir, meleeDict->GetString ( "classname" ), damageScale, location );
+
 
 	if ( meleeDict->GetString( "fx_impact", NULL ) ) {
 		if ( enemyEnt == gameLocal.GetLocalPlayer() ) {

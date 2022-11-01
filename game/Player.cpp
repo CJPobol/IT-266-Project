@@ -3951,6 +3951,9 @@ void idPlayer::StopFiring( void ) {
 	pfl.attackHeld	= false;
 	pfl.weaponFired = false;
 	pfl.reload		= false;
+
+	
+
 	if ( weapon ) {
 		weapon->EndAttack();
 	}
@@ -9180,6 +9183,8 @@ void idPlayer::UpdateHud( void ) {
  	} else {
  		hud->SetStateString( "hudLag", "0" );
  	}
+	
+	hud->SetStateInt("friends_val", friends);
 }
 
 /*
@@ -9964,7 +9969,7 @@ void idPlayer::CalcDamagePoints( idEntity *inflictor, idEntity *attacker, const 
 	int		armorSave;
 	float	pDmgScale;
 
-	damageDef->GetInt( "damage", "20", damage );
+	damageDef->GetInt( "damage", "0", damage );
 	damage = GetDamageForLocation( damage, location );
 
 	// optional different damage in team games
@@ -10070,7 +10075,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	// RAVEN BEGIN
 	// twhitaker: difficulty levels
 	float modifiedDamageScale = damageScale;
-	
+
 	if ( !gameLocal.isMultiplayer ) {
 		if ( inflictor != gameLocal.world ) {
 			modifiedDamageScale *= ( 1.0f + gameLocal.GetDifficultyModifier() );
@@ -11279,6 +11284,8 @@ void idPlayer::SetLastHitTime( int time, bool armorHit ) {
 		lastHitTime = time;
 		lastArmorHit = armorHit;
 		lastHitToggle ^= 1;
+		friends++;
+		gameLocal.Printf("Thank you!\n");
 	}
 }
 
@@ -12547,19 +12554,22 @@ void idPlayer::ReadFromSnapshot( const idBitMsgDelta &msg ) {
 		SetPhysics( &physicsObj );
 		physicsObj.EnableClip();
 		SetCombatContents( true );
-	} else if ( oldHealth - health > 2 && health > 0 ) {
- 		if ( stateHitch ) {
+	}
+	else if (oldHealth - health > 2 && health > 0) {
+		if (stateHitch) {
 			lastDmgTime = gameLocal.time;
-   		} else {
- 			// damage feedback
- 			const idDeclEntityDef *def = static_cast<const idDeclEntityDef *>( declManager->DeclByIndex( DECL_ENTITYDEF, lastDamageDef, false ) );
- 			if ( def ) {
- 				ClientDamageEffects ( def->dict, lastDamageDir, oldHealth - health );
- 				pfl.pain = Pain( NULL, NULL, oldHealth - health, lastDamageDir, lastDamageLocation );
- 				lastDmgTime = gameLocal.time;
- 			} else {
- 				common->Warning( "NET: no damage def for damage feedback '%d'\n", lastDamageDef );
- 			}
+		}
+		else {
+			// damage feedback
+			const idDeclEntityDef* def = static_cast<const idDeclEntityDef*>(declManager->DeclByIndex(DECL_ENTITYDEF, lastDamageDef, false));
+			if (def) {
+				ClientDamageEffects(def->dict, lastDamageDir, oldHealth - health);
+				pfl.pain = Pain(NULL, NULL, oldHealth - health, lastDamageDir, lastDamageLocation);
+				lastDmgTime = gameLocal.time;
+			}
+			else {
+				common->Warning("NET: no damage def for damage feedback '%d'\n", lastDamageDef);
+			}
 		}
 	}
 

@@ -1913,6 +1913,7 @@ rvWeapon::EndAttack
 ================
 */
 void rvWeapon::EndAttack( void ) {
+
 	wsfl.attack = false;
 }
 
